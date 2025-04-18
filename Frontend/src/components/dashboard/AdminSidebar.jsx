@@ -13,7 +13,7 @@ const AdminSidebar = () => {
   const navItems = [
     { label: 'Dashboard', icon: <FaTachometerAlt />, path: '/admin-dashboard' },
     { label: 'Employee', icon: <FaUsers />, path: '/admin-dashboard' },
-    { label: 'Department', icon: <FaBuilding />, path: '/admin-dashboard' },
+    { label: 'Department', icon: <FaBuilding />, path: '/admin-dashboard/departments' },
     { label: 'Leave', icon: <FaCalendarAlt />, path: '/admin-dashboard' },
     { label: 'Salary', icon: <FaMoneyBillWave />, path: '/admin-dashboard' },
     { label: 'Settings', icon: <FaCog />, path: '/admin-dashboard' },
