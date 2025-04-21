@@ -24,16 +24,18 @@ const AddDepartment = () => {
         department,
         {
           headers: {
+            "Content-Type": "application/json",
             Authorization: `Bearer ${localStorage.getItem("token")}`,
           },
         }
       );
+      console.log(response)
       if (response.data.success) {
         navigate("/admin-dashboard/departments");
       }
     } catch (error) {
       if (error.response && !error.response.data.success) {
-        console.log(errlor.response.data.error);
+        console.log(error.response.data);
       }
     }
     // Add your API call here to submit the department data
@@ -45,7 +47,7 @@ const AddDepartment = () => {
         <h3 className="text-2xl font-bold text-gray-800">Add Department</h3>
       </div>
 
-      <form className="flex flex-col gap-4">
+      <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
         <div className="flex flex-col">
           <label
             htmlFor="departmentName"

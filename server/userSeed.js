@@ -6,6 +6,8 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 const userRegister = async () => {
+    console.log('test');
+
     connectToDatabase()
     try {
         const hashPassword = await bcrypt.hash("admin", 10)
@@ -15,7 +17,9 @@ const userRegister = async () => {
             password: hashPassword,
             role: "admin"
         })
+        console.log("here")
         await newUser.save()
+        return "uSER SAVED SUCCESSFULLY"
     } catch (error) {
         console.log(error)
     }
