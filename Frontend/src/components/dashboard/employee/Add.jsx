@@ -1,10 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { fetchDepartments } from "../../../utils/EmployeeHelper";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const Add = () => {
   const [departments, setDepartments] = useState([]);
   const [formData, setFormData] = useState({});
+
+  const navigate = useNavigate();
   useEffect(() => {
     const getDepartments = async () => {
       const departments = await fetchDepartments();
@@ -42,7 +45,7 @@ const Add = () => {
         );
         console.log(response)
         if (response.data.success) {
-          navigate("/admin-dashboard/emplouyees");
+          navigate("/admin-dashboard/employees");
         }
       } catch (error) {
         if (error.response && !error.response.data.success) {
@@ -90,7 +93,7 @@ const Add = () => {
             <label className="block mb-1 text-gray-700">Employee ID</label>
             <input
               type="tel"
-              name="employeeID"
+              name="employeeId"
               //   value={formData.phone}
               onChange={handleChange}
               className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
