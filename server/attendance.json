@@ -1,0 +1,22 @@
+{
+  "date": "2023-10-01",
+  "topic": "",
+  "vakta": "John Doe",
+  "attendance": [
+    {
+      "employeeId": 1,
+      "name": "John Doe",
+      "status": "Present"
+    },
+    {
+      "employeeId": 2,
+      "name": "Jane Smith",
+      "status": "Absent"
+    },
+    {
+      "employeeId": 3,
+      "name": "Alice Johnson",
+      "status": "Present"
+    }
+  ]
+}

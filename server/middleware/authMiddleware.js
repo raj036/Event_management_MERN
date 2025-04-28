@@ -22,7 +22,6 @@ const verifyUser = async (req, res, next) => {
         }
         req.user = user
 
-        console.log("req", req.user)
         next()
     } catch (error) {
         return res.status(500).json({ success: false, error: "Server side error" })

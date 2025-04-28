@@ -1,12 +1,12 @@
 import React from 'react'
 import { NavLink } from 'react-router-dom'
-import { 
-  FaTachometerAlt, 
-  FaUsers, 
-  FaBuilding, 
-  FaCalendarAlt, 
-  FaMoneyBillWave, 
-  FaCog 
+import {
+  FaTachometerAlt,
+  FaUsers,
+  FaBuilding,
+  FaCalendarAlt,
+  FaMoneyBillWave,
+  FaCog
 } from 'react-icons/fa'
 
 const AdminSidebar = () => {
@@ -15,23 +15,23 @@ const AdminSidebar = () => {
     { label: 'Employee', icon: <FaUsers />, path: '/admin-dashboard/employees' },
     { label: 'Department', icon: <FaBuilding />, path: '/admin-dashboard/departments' },
     { label: 'Leave', icon: <FaCalendarAlt />, path: '/admin-dashboard' },
-    { label: 'Salary', icon: <FaMoneyBillWave />, path: '/admin-dashboard' },
-    { label: 'Settings', icon: <FaCog />, path: '/admin-dashboard' },
+    // { label: 'Salary', icon: <FaMoneyBillWave />, path: '/admin-dashboard' },
+    // { label: 'Settings', icon: <FaCog />, path: '/admin-dashboard' },
   ]
 
   return (
-    <div className="w-64 h-screen bg-gray-800 text-white flex flex-col">
-      <div className="p-6 text-2xl font-bold border-b border-gray-700">
-        Employee MS
+    <div className="w-64 h-screen bg-gray-700 text-white flex flex-col">
+      <div className="p-[8px] text-[20px] text-center font-bold border-b border-gray-700 bg-teal-600">
+        Saral Mandal
       </div>
       <nav className="flex-1 p-4 space-y-2">
         {navItems.map((item, index) => (
-          <NavLink 
+          <NavLink
             to={item.path}
             key={index}
+            end={item.path === '/admin-dashboard'}
             className={({ isActive }) =>
-              `flex items-center space-x-3 px-4 py-2 rounded-md hover:bg-gray-700 transition-colors ${
-                isActive ? 'bg-gray-700 font-semibold' : ''
+              `flex items-center space-x-3 px-4 py-2 rounded-md hover:bg-teal-600 transition-colors ${isActive ? 'bg-teal-600 font-semibold' : ''
               }`
             }
           >

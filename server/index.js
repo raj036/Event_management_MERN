@@ -10,7 +10,9 @@ connectToDatabase()
 dotenv.config();
 const app = express()
 app.use(cors())
+app.use(express.static('public'))
 app.use(express.json())
+app.use('/uploads', express.static('public/uploads'));//for serving static files like images
 app.use('/api/auth', authRouter)
 app.use('/api/department', departmentRouter)
 app.use('/api/employee', employeeRouter)

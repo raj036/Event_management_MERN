@@ -18,6 +18,7 @@ const Add = () => {
 
   const handleChange = (e) => {
     const { name, value, files } = e.target;
+    console.log(name, value, files);
     if (name === "image") {
       setFormData((prev) => ({ ...prev, [name]: files[0] }));
     } else {
@@ -25,33 +26,36 @@ const Add = () => {
     }
   };
 
+  console.log(formData, "formData");
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     const formDataObj = new FormData();
     Object.keys(formData).forEach((key) => {
-        formDataObj.append(key, formData[key])
+      formDataObj.append(key, formData[key])
     })
+    console.log(formDataObj, "formDataObj");
     try {
-        const response = await axios.post(
-          "http://localhost:5000/api/employee/add",
-          formDataObj,
-          {
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${localStorage.getItem("token")}`,
-            },
-          }
-        );
-        console.log(response)
-        if (response.data.success) {
-          navigate("/admin-dashboard/employees");
+      const response = await axios.post(
+        "http://localhost:5000/api/employee/add",
+        formDataObj,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
         }
-      } catch (error) {
-        if (error.response && !error.response.data.success) {
-          console.log(error.response.data);
-        }
+      );
+      console.log(response)
+      if (response.data.success) {
+        navigate("/admin-dashboard/employees");
       }
+    } catch (error) {
+      if (error.response && !error.response.data.success) {
+        console.log(error.response.data);
+      }
+    }
 
   }
 
