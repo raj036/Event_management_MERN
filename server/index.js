@@ -4,6 +4,7 @@ import dotenv from 'dotenv';
 import authRouter from "./routes/auth.js"
 import departmentRouter from './routes/department.js'
 import employeeRouter from './routes/employee.js'
+import taskRouter from './routes/task.js'
 import connectToDatabase from "./db/db.js"
 
 connectToDatabase()
@@ -16,6 +17,7 @@ app.use('/uploads', express.static('public/uploads'));//for serving static files
 app.use('/api/auth', authRouter)
 app.use('/api/department', departmentRouter)
 app.use('/api/employee', employeeRouter)
+app.use('/api/task', taskRouter)
 
 
 app.listen(process.env.PORT, () => {

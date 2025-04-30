@@ -9,11 +9,11 @@ import {
   FaCog
 } from 'react-icons/fa'
 
-const AdminSidebar = () => {
+const UserSidebar = () => {
   const navItems = [
-    { label: 'Dashboard', icon: <FaTachometerAlt />, path: '/admin-dashboard' },
-    { label: 'Employee', icon: <FaUsers />, path: '/admin-dashboard/employees' },
-    { label: 'Department', icon: <FaBuilding />, path: '/admin-dashboard/departments' },
+    { label: 'Dashboard', icon: <FaTachometerAlt />, path: '/employee-dashboard' },
+    // { label: 'Employee', icon: <FaUsers />, path: '/admin-dashboard/employees' },
+    // { label: 'Department', icon: <FaBuilding />, path: '/admin-dashboard/departments' },
     // { label: 'Leave', icon: <FaCalendarAlt />, path: '/admin-dashboard' },
     // { label: 'Salary', icon: <FaMoneyBillWave />, path: '/admin-dashboard' },
     // { label: 'Settings', icon: <FaCog />, path: '/admin-dashboard' },
@@ -44,4 +44,4 @@ const AdminSidebar = () => {
   )
 }
 
-export default AdminSidebar
+export default UserSidebar
