@@ -59,7 +59,8 @@ export const fetchDepartments = async () => {
   return departments;
 };
 
-export const EmployeeButtons = ({ Id }) => {
+export const EmployeeButtons = ({ Id, empId }) => {
+  // console.log(Id)
   const navigate = useNavigate();
   const [handDate, setHandDate] = useState()
 
@@ -68,7 +69,7 @@ export const EmployeeButtons = ({ Id }) => {
     setHandDate(date);
     const attendanceDate = (date.toISOString().split('T')[0])
     try {
-      const response = await axios.post(`http://localhost:5000/api/employee/ravi1234/attendanceM`, { presentDate: attendanceDate }, {
+      const response = await axios.post(`http://localhost:5000/api/employee/${empId}/attendanceM`, { presentDate: attendanceDate }, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
@@ -97,17 +98,12 @@ export const EmployeeButtons = ({ Id }) => {
       >
         Edit
       </button>
-      {/* <button
-        className="bg-yellow-500 hover:bg-yellow-600 text-white font-semibold px-4 py-2 rounded-lg transition"
-      >
-        Salary
-      </button>
-      <button
-        className="bg-red-500 hover:bg-red-600 text-white font-semibold px-4 py-2 rounded-lg transition"
-      >
-        Leave
-      </button> */}
-      <DatePicker dateFormat="dd/mm/yy" onChange={handleDateChng} />
+      <DatePicker
+        onChange={handleDateChng}
+        dateFormat="dd/MM/yy"
+        placeholderText="Select date"
+        className="px-3 py-2 border rounded-md"
+      />
     </div>
   );
 };

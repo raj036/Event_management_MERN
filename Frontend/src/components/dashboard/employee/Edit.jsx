@@ -113,7 +113,6 @@ const Edit = () => {
                             />
                         </div>
 
-
                         <div>
                             <label className="block mb-1 text-gray-700">Marital status</label>
                             <select

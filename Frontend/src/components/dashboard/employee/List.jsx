@@ -29,6 +29,7 @@ const List = () => {
             _id: emp._id,
             dep_name: emp.department.dep_name,
             sno: sno++,
+            empId: emp?.employeeId,
             name: emp.userId?.name,
             dob: new Date(emp.dob).toLocaleDateString(),
             profileImage: emp.userId?.profileImage ? (
@@ -38,7 +39,7 @@ const List = () => {
                 {emp.userId?.name?.charAt(0).toUpperCase()}
               </div>
             ),
-            action: (<EmployeeButtons Id={emp._id} />),
+            action: (<EmployeeButtons Id={emp._id} empId={emp.employeeId} />),
           }));
           console.log(data)
           setEmployees(data);
