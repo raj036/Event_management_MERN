@@ -13,6 +13,8 @@ import List from "./components/dashboard/employee/List";
 import Add from "./components/dashboard/employee/Add";
 import View from "./components/dashboard/employee/View";
 import Edit from "./components/dashboard/employee/Edit";
+import AddTask from "./components/dashboard/Task/AddTask";
+import UserSummary from "./components/UserDashboard/UserSummary";
 
 function App() {
   return (
@@ -30,6 +32,7 @@ function App() {
             </PrivateRoutes>
           }
         >
+          {/* Dashboard Routes */}
           <Route index element={<AdminSummary />}></Route>
           <Route
             path="/admin-dashboard/departments"
@@ -44,6 +47,7 @@ function App() {
             element={<EditDepartment />}
           ></Route>
 
+          {/*Employee routes */}
           <Route path="/admin-dashboard/employees" element={<List />}></Route>
           <Route path="/admin-dashboard/add-employee" element={<Add />}></Route>
           <Route
@@ -54,6 +58,9 @@ function App() {
             path="/admin-dashboard/employees/edit/:id"
             element={<Edit />}
           ></Route>
+
+          {/*Task Routes */}
+          <Route path="/admin-dashboard/task" element={<AddTask />}></Route>
         </Route>
 
         <Route
@@ -65,7 +72,9 @@ function App() {
               </RoleBaseRoutes>
             </PrivateRoutes>
           }
-        ></Route>
+        >
+          <Route index element={<UserSummary />}></Route>
+        </Route>
       </Routes>
     </BrowserRouter>
   );

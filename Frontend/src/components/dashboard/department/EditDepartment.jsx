@@ -1,5 +1,5 @@
-import React, { useEffect , useState} from "react";
-import { useParams , useNavigate} from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 
 const EditDepartment = () => {
@@ -9,7 +9,6 @@ const EditDepartment = () => {
   const [loading, setLoading] = useState(false);
 
   const navigate = useNavigate();
-  
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -54,7 +53,7 @@ const EditDepartment = () => {
           },
         }
       );
-      console.log(response)
+      console.log(response);
       if (response.data.success) {
         navigate("/admin-dashboard/departments");
       }

@@ -14,7 +14,7 @@ const AdminSidebar = () => {
     { label: 'Dashboard', icon: <FaTachometerAlt />, path: '/admin-dashboard' },
     { label: 'Employee', icon: <FaUsers />, path: '/admin-dashboard/employees' },
     { label: 'Department', icon: <FaBuilding />, path: '/admin-dashboard/departments' },
-    // { label: 'Leave', icon: <FaCalendarAlt />, path: '/admin-dashboard' },
+    { label: 'Add Task', icon: <FaCalendarAlt />, path: '/admin-dashboard/task' },
     // { label: 'Salary', icon: <FaMoneyBillWave />, path: '/admin-dashboard' },
     // { label: 'Settings', icon: <FaCog />, path: '/admin-dashboard' },
   ]
