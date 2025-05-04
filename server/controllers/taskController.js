@@ -36,4 +36,40 @@ const addTask = async (req, res) => {
   }
 };
 
-export { getTasks, addTask };
+const taskResponse = async (req, res) => {
+  try {
+    const { taskId, userId } = req.params;
+    const { response } = req.body;
+
+    const task = await Task.findById(taskId);
+    if (!task) {
+      return res.status(404).json({ success: false, error: "Task not found" });
+    }
+
+    // Check if the user already responded
+    const existingResponseIndex = task.response.findIndex(
+      (resp) => resp.user_id === userId
+    );
+
+    if (existingResponseIndex !== -1) {
+      // Update the existing response
+      task.response[existingResponseIndex].response = response;
+    } else {
+      // Add a new response
+      task.response.push({ user_id: userId, response });
+    }
+
+    task.updatedAt = new Date(); // Update the timestamp
+    await task.save();
+
+    return res.status(200).json({ success: true, task });
+  } catch (error) {
+    console.log(error);
+    return res
+      .status(500)
+      .json({ success: false, error: "Failed to update task response" });
+  }
+};
+
+
+export { getTasks, addTask, taskResponse };
