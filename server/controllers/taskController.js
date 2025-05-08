@@ -1,8 +1,27 @@
 import Task from "../models/Task.js";
+import { createRequire } from "module";
+const require = createRequire(import.meta.url);
+import Stream from "stream";
+const { Readable } = require("stream");
+const fs = require("fs");
+
+
 
 const getTasks = async (req, res) => {
   try {
+
+ 
     const employees = await Task.find();
+    res.writeHead(200,{
+      'Content-Type': 'text/event-stream',
+      'Cache-Control': 'no-cache',
+      'Connection': 'keep-alive',
+    })
+
+    console.log(res, "employees");
+    setInterval(()=> {
+      res.write(`data: ${JSON.stringify({ employees })}\n\n`)
+    }, 1000)
     return res.status(200).json({ success: true, employees });
   } catch (error) {
     return res
@@ -71,5 +90,21 @@ const taskResponse = async (req, res) => {
   }
 };
 
+const readableStream = Readable.from(fs.createReadStream("input.txt", { encoding: "utf8" }));
+readableStream.on("data", (chunk) => {
+  console.log("Reading chunk:", chunk.toString());
+});
+
+const writableStream = fs.createWriteStream("output.txt");
+readableStream.pipe(writableStream);
+
+writableStream.on("finish", () => {
+  console.log("Finished writing to file");
+});
+
+// Handle any errors
+writableStream.on("error", (err) => {
+  console.error("An error occurred:", err);
+});
 
 export { getTasks, addTask, taskResponse };

@@ -9,25 +9,55 @@ const AddTask = () => {
   });
 
   const [tasksData, setTasksData] = useState([]); // To hold the tasks data
-  const [yesCount, setYesCount] = useState(0);  // To store the 'yes' responses count
-  const [noCount, setNoCount] = useState(0);   // To store the 'no' responses count
-
-  // Function to count the 'yes' and 'no' responses
-  const countResponses = (responses) => {
-    let yes = 0;
-    let no = 0;
-    responses.forEach((response) => {
-      if (response.response === true) {
-        yes += 1;
-      } else {
-        no += 1;
-      }
-    });
-    setYesCount(yes);
-    setNoCount(no);
-  };
 
   // Fetch the task data when the component mounts
+
+useEffect(() => {
+  const eventSource = new EventSource("http://localhost:5000/api/task", {
+    headers: {
+      'Content-Type': 'text/event-stream',
+      Authorization: `Bearer ${localStorage.getItem("token")}`,
+    },
+  });
+
+  if(typeof(eventSource) !== 'undefined') {
+    console.log("EventSource is supported in this browser.");
+  } else {
+    console.log("EventSource is not supported in this browser.");
+  }
+
+  eventSource.onmessage = (event) => {
+    const eventData = JSON.parse(event.data);
+    console.log(eventData, "eventData");
+    if (eventData && eventData.employees) {
+      const rawTasks = eventData.employees; // Assuming 'employees' contains tasks
+
+      // Enhance each task with yes/no counts
+      const tasksWithCounts = rawTasks.map((task) => {
+        let yes = 0;
+        let no = 0;
+
+        if (Array.isArray(task.response)) {
+          task.response.forEach((resp) => {
+            if (resp.response === true) yes++;
+            else if (resp.response === false) no++;
+          });
+        }
+
+        return {
+          ...task,
+          yesCount: yes,
+          noCount: no,
+        };
+      });
+
+      setTasksData(tasksWithCounts);
+    }
+  }
+
+  return () => eventSource.close(); // Cleanup the EventSource on component unmount
+}, []); // Empty dependency array to run only once on mount
+
   useEffect(() => {
     // setInterval(() => {
     const fetchTaskData = async () => {
@@ -38,17 +68,30 @@ const AddTask = () => {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
           },
         });
-        console.log(response, "response.data.tasks");
+        console.log(response.data.employees, "response.data.tasks");
 
-        const taskData = response.data.employees; // Assuming the 'employees' array contains tasks
-        setTasksData(taskData);
+        const rawTasks = response.data.employees; // Assuming 'employees' contains tasks
 
-        // Map through each task and count the responses
-        taskData.forEach(task => {
-          if (task.response) {
-            countResponses(task.response); // Count the 'yes' and 'no' responses for each task
-          }
+    // Enhance each task with yes/no counts
+    const tasksWithCounts = rawTasks.map((task) => {
+      let yes = 0;
+      let no = 0;
+
+      if (Array.isArray(task.response)) {
+        task.response.forEach((resp) => {
+          if (resp.response === true) yes++;
+          else if (resp.response === false) no++;
         });
+      }
+
+      return {
+        ...task,
+        yesCount: yes,
+        noCount: no,
+      };
+    });
+
+    setTasksData(tasksWithCounts);
       } catch (error) {
         console.log("Error fetching task data:", error);
       }
@@ -155,8 +198,8 @@ const AddTask = () => {
             <div key={index} className="mb-4">
               <p><strong>Task Name:</strong> {task.task_name}</p>
               <p><strong>Task Date:</strong> {task.task_date}</p>
-              <p><strong>Yes Responses:</strong> {yesCount}</p>
-              <p><strong>No Responses:</strong> {noCount}</p>
+              <p><strong>Yes Responses:</strong> {task.yesCount}</p>
+              <p><strong>No Responses:</strong> {task.noCount}</p>
             </div>
           ))
         )}
