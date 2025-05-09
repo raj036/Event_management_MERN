@@ -1,7 +1,6 @@
 import Task from "../models/Task.js";
 import { createRequire } from "module";
 const require = createRequire(import.meta.url);
-import Stream from "stream";
 const { Readable } = require("stream");
 const fs = require("fs");
 
@@ -9,8 +8,6 @@ const fs = require("fs");
 
 const getTasks = async (req, res) => {
   try {
-
- 
     const employees = await Task.find();
     res.writeHead(200,{
       'Content-Type': 'text/event-stream',
@@ -19,10 +16,11 @@ const getTasks = async (req, res) => {
     })
 
     console.log(res, "employees");
-    setInterval(()=> {
-      res.write(`data: ${JSON.stringify({ employees })}\n\n`)
-    }, 1000)
-    return res.status(200).json({ success: true, employees });
+    // setInterval(()=> {
+    //   res.write(`data: ${JSON.stringify({ employees })}\n\n`)
+    // }, 1000)
+    res.end(`data: ${json({ employees })}\n\n`)
+    // return res.status(200).json({ success: true, employees });
   } catch (error) {
     return res
       .status(500)
