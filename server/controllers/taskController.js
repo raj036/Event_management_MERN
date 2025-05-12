@@ -4,27 +4,39 @@ const require = createRequire(import.meta.url);
 const { Readable } = require("stream");
 const fs = require("fs");
 
-
-
 const getTasks = async (req, res) => {
   try {
     const employees = await Task.find();
-    res.writeHead(200,{
-      'Content-Type': 'text/event-stream',
-      'Cache-Control': 'no-cache',
-      'Connection': 'keep-alive',
-    })
+    const headers = {
+      "Content-Type": "text/event-stream",
+      "Cache-Control": "no-cache",
+      "Connection": "keep-alive",
+    };
+     res.writeHead(200, headers);
+    const intervalId = setInterval(() => {
+      res.write("data: " + JSON.stringify({ employees }) + "\n\n");
+    }, 3000);
 
-    console.log(res, "employees");
+    req.on("close", () => {
+      clearInterval(intervalId);
+      res.end();
+    });
+    // return res
+    //   .writeHead(200, {
+
+    //   }).json({ success: true, employees });
+
+    console.log(res, "tasks");
     // setInterval(()=> {
     //   res.write(`data: ${JSON.stringify({ employees })}\n\n`)
     // }, 1000)
-    res.end(`data: ${json({ employees })}\n\n`)
+    // return res.status(200).json({ success: true, employees });
     // return res.status(200).json({ success: true, employees });
   } catch (error) {
-    return res
-      .status(500)
-      .json({ success: false, error: "get employees server error" });
+    console.log(error);
+    // return res
+    //   .status(500)
+    //   .json({ success: false, error: "get tasks server error" });
   }
 };
 
@@ -88,7 +100,9 @@ const taskResponse = async (req, res) => {
   }
 };
 
-const readableStream = Readable.from(fs.createReadStream("input.txt", { encoding: "utf8" }));
+const readableStream = Readable.from(
+  fs.createReadStream("input.txt", { encoding: "utf8" })
+);
 readableStream.on("data", (chunk) => {
   console.log("Reading chunk:", chunk.toString());
 });
