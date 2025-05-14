@@ -1,18 +1,30 @@
 import Task from "../models/Task.js";
 import { createRequire } from "module";
+
 const require = createRequire(import.meta.url);
+const jwt = require("jsonwebtoken");
 const { Readable } = require("stream");
 const fs = require("fs");
 
 const getTasks = async (req, res) => {
   try {
+    const token = req.query.token;
+    if (!token) {
+      return res.status(401).json({ success: false, error: "Token not provided" });
+    }
+    let user;
+    try {
+      user = jwt.verify(token, process.env.JWT_KEY);
+    } catch (error) {
+      return res.status(401).json({ success: false, error: "Invalid token" });
+    }
     const employees = await Task.find();
     const headers = {
       "Content-Type": "text/event-stream",
       "Cache-Control": "no-cache",
       "Connection": "keep-alive",
     };
-     res.writeHead(200, headers);
+    res.writeHead(200, headers);
     const intervalId = setInterval(() => {
       res.write("data: " + JSON.stringify({ employees }) + "\n\n");
     }, 3000);
@@ -26,14 +38,14 @@ const getTasks = async (req, res) => {
 
     //   }).json({ success: true, employees });
 
-    console.log(res, "tasks");
+    // console.log(res, "tasks");
     // setInterval(()=> {
     //   res.write(`data: ${JSON.stringify({ employees })}\n\n`)
     // }, 1000)
     // return res.status(200).json({ success: true, employees });
     // return res.status(200).json({ success: true, employees });
   } catch (error) {
-    console.log(error);
+    // console.log(error);
     // return res
     //   .status(500)
     //   .json({ success: false, error: "get tasks server error" });
@@ -42,9 +54,9 @@ const getTasks = async (req, res) => {
 
 const addTask = async (req, res) => {
   try {
-    console.log(req.user, "role");
+    // console.log(req.user, "role");
     const roleBasedAccess = req.user?.role === "admin";
-    console.log(roleBasedAccess, "roleBasedAccess");
+    // console.log(roleBasedAccess, "roleBasedAccess");
     if (!roleBasedAccess) {
       return res.status(403).json({ success: false, error: "Access denied" });
     }
@@ -93,7 +105,7 @@ const taskResponse = async (req, res) => {
 
     return res.status(200).json({ success: true, task });
   } catch (error) {
-    console.log(error);
+    // console.log(error);
     return res
       .status(500)
       .json({ success: false, error: "Failed to update task response" });

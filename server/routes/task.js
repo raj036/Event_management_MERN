@@ -4,7 +4,7 @@ import { getTasks, addTask, taskResponse } from "../controllers/taskController.j
 
 const router = express.Router()
 
-router.get("/", authMiddleware, getTasks)
+router.get("/", getTasks)
 router.post("/add", authMiddleware, addTask)
 router.post("/:taskId/response/:userId", authMiddleware, taskResponse)
 // router.get("/:id", authMiddleware, getDepartment)
