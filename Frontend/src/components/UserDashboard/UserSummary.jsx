@@ -11,7 +11,7 @@ const UserSummary = () => {
     const fetchTasks = async () => {
       setLoading(true);
       try {
-        const response = await axios.get("http://localhost:5000/api/task", {
+        const response = await axios.get("http://localhost:5000/api/task/data", {
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${localStorage.getItem("token")}`,

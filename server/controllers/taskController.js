@@ -3,8 +3,6 @@ import { createRequire } from "module";
 
 const require = createRequire(import.meta.url);
 const jwt = require("jsonwebtoken");
-const { Readable } = require("stream");
-const fs = require("fs");
 
 const getTasks = async (req, res) => {
   try {
@@ -33,19 +31,8 @@ const getTasks = async (req, res) => {
       clearInterval(intervalId);
       res.end();
     });
-    // return res
-    //   .writeHead(200, {
 
-    //   }).json({ success: true, employees });
-
-    // console.log(res, "tasks");
-    // setInterval(()=> {
-    //   res.write(`data: ${JSON.stringify({ employees })}\n\n`)
-    // }, 1000)
-    // return res.status(200).json({ success: true, employees });
-    // return res.status(200).json({ success: true, employees });
   } catch (error) {
-    // console.log(error);
     // return res
     //   .status(500)
     //   .json({ success: false, error: "get tasks server error" });
@@ -76,6 +63,21 @@ const addTask = async (req, res) => {
       .json({ success: false, error: "add task server error" });
   }
 };
+
+const getTaskData = async (req, res) => {
+  console.log(res, 'data')
+  try {
+    const employees = await Task.find();
+    // if (!task) {
+    //   return res.status(404).json({ success: false, error: "Task not found" });
+    // }
+    return res.status(200).json({ success: true, employees });
+  } catch (error) {
+    return res
+      .status(500)
+      .json({ success: false, error: "get employees server error" });
+  }
+}
 
 const taskResponse = async (req, res) => {
   try {
@@ -112,23 +114,4 @@ const taskResponse = async (req, res) => {
   }
 };
 
-const readableStream = Readable.from(
-  fs.createReadStream("input.txt", { encoding: "utf8" })
-);
-readableStream.on("data", (chunk) => {
-  console.log("Reading chunk:", chunk.toString());
-});
-
-const writableStream = fs.createWriteStream("output.txt");
-readableStream.pipe(writableStream);
-
-writableStream.on("finish", () => {
-  console.log("Finished writing to file");
-});
-
-// Handle any errors
-writableStream.on("error", (err) => {
-  console.error("An error occurred:", err);
-});
-
-export { getTasks, addTask, taskResponse };
+export { getTasks, addTask, taskResponse, getTaskData };
