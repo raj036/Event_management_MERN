@@ -7,15 +7,13 @@ const AddTask = () => {
     task_name: "",
     task_date: "",
   });
-
   const [tasksData, setTasksData] = useState([]); // To hold the tasks data
-
-  // Fetch the task data when the component mounts
   const myLocalToken = localStorage.getItem("token");
+
   useEffect(() => {
     const eventSource = new EventSource(`http://localhost:5000/api/task?token=${myLocalToken}`);
     function getRealtimeData(data) {
-      console.log(data, "data");
+      // console.log(data, "data");
       const rawTasks = data.employees; // Assuming 'employees' contains tasks
 
       // Enhance each task with yes/no counts
@@ -36,101 +34,61 @@ const AddTask = () => {
           noCount: no,
         };
       });
+      // console.log(tasksWithCounts, "tasksWithCounts");
 
       setTasksData(tasksWithCounts);
     }
     eventSource.onmessage = e => getRealtimeData(JSON.parse(e.data));
-    console.log(eventSource, "eventSource");
+    // console.log(eventSource, "eventSource");
     eventSource.onerror = () => {
-      // error log here 
-
       eventSource.close();
     }
     return () => {
       eventSource.close();
     };
+  }, [tasksData]); // Empty dependency array to run only once on mount
 
-    // if(typeof(eventSource) !== 'undefined') {
-    //   console.log("EventSource is supported in this browser.");
-    // } else {
-    //   console.log("EventSource is not supported in this browser.");
-    // }
+  // useEffect(() => {
+  //   // setInterval(() => {
+  //   const fetchTaskData = async () => {
+  //     try {
+  //       const response = await axios.get("http://localhost:5000/api/task", {
+  //         headers: {
+  //           "Content-Type": "application/json; charset=utf-8",
+  //           Authorization: `Bearer ${myLocalToken}`,
+  //         },
+  //       });
+  //       console.log(response.data.employees, "response.data.tasks");
 
-    // eventSource.onmessage = (event) => {
-    //   const eventData = JSON.parse(event.data);
-    //   console.log(eventData, "eventData");
-    //   if (eventData && eventData.employees) {
-    //     const rawTasks = eventData.employees; // Assuming 'employees' contains tasks
+  //       const rawTasks = response.data.employees; // Assuming 'employees' contains tasks
 
-    //     // Enhance each task with yes/no counts
-    //     const tasksWithCounts = rawTasks.map((task) => {
-    //       let yes = 0;
-    //       let no = 0;
+  //       // Enhance each task with yes/no counts
+  //       const tasksWithCounts = rawTasks.map((task) => {
+  //         let yes = 0;
+  //         let no = 0;
 
-    //       if (Array.isArray(task.response)) {
-    //         task.response.forEach((resp) => {
-    //           if (resp.response === true) yes++;
-    //           else if (resp.response === false) no++;
-    //         });
-    //       }
+  //         if (Array.isArray(task.response)) {
+  //           task.response.forEach((resp) => {
+  //             if (resp.response === true) yes++;
+  //             else if (resp.response === false) no++;
+  //           });
+  //         }
 
-    //       return {
-    //         ...task,
-    //         yesCount: yes,
-    //         noCount: no,
-    //       };
-    //     });
+  //         return {
+  //           ...task,
+  //           yesCount: yes,
+  //           noCount: no,
+  //         };
+  //       });
 
-    //     setTasksData(tasksWithCounts);
-    //   }
-    // }
+  //       setTasksData(tasksWithCounts);
+  //     } catch (error) {
+  //       console.log("Error fetching task data:", error);
+  //     }
+  //   };
 
-    // return () => eventSource.close(); // Cleanup the EventSource on component unmount
-  }, []); // Empty dependency array to run only once on mount
-
-  useEffect(() => {
-    // setInterval(() => {
-    const fetchTaskData = async () => {
-      try {
-        const response = await axios.get("http://localhost:5000/api/task", {
-          headers: {
-            "Content-Type": "application/json; charset=utf-8",
-            Authorization: `Bearer ${myLocalToken}`,
-          },
-        });
-        console.log(response.data.employees, "response.data.tasks");
-
-        const rawTasks = response.data.employees; // Assuming 'employees' contains tasks
-
-        // Enhance each task with yes/no counts
-        const tasksWithCounts = rawTasks.map((task) => {
-          let yes = 0;
-          let no = 0;
-
-          if (Array.isArray(task.response)) {
-            task.response.forEach((resp) => {
-              if (resp.response === true) yes++;
-              else if (resp.response === false) no++;
-            });
-          }
-
-          return {
-            ...task,
-            yesCount: yes,
-            noCount: no,
-          };
-        });
-
-        setTasksData(tasksWithCounts);
-      } catch (error) {
-        console.log("Error fetching task data:", error);
-      }
-    };
-
-    fetchTaskData();
-    // }, 1000); // This line seems unnecessary and can be removed
-
-  }, []);  // Only fetch once on component mount
+  //   fetchTaskData();
+  // }, []);  // Only fetch once on component mount
 
   const handleChange = (e) => {
     const { name, value } = e.target;

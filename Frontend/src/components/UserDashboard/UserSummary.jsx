@@ -1,22 +1,26 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useAuth } from "../../context/authContext";
+import "./UserSummary.css"; // Import your CSS file
 
 const UserSummary = () => {
   const [tasks, setTasks] = useState([]);
   const [loading, setLoading] = useState(false);
   const [attendance, setAttendance] = useState({}); // Store taskId: "yes" or "no"
-  const { user } = useAuth()
+  const { user } = useAuth();
   useEffect(() => {
     const fetchTasks = async () => {
       setLoading(true);
       try {
-        const response = await axios.get("http://localhost:5000/api/task/data", {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-        });
+        const response = await axios.get(
+          "http://localhost:5000/api/task/data",
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+          }
+        );
 
         if (response.data.success) {
           setTasks(response.data.employees || []);
@@ -49,7 +53,7 @@ const UserSummary = () => {
           },
         }
       );
-      console.log(response)
+      console.log(response);
 
       // if (response.data.success) {
       //   navigate("/admin-dashboard/employees");
@@ -59,8 +63,7 @@ const UserSummary = () => {
         console.log(error.response.data);
       }
     }
-
-  }
+  };
 
   const [showPopup, setShowPopup] = useState(false);
   const [selectedTask, setSelectedTask] = useState(null);
@@ -121,7 +124,9 @@ const UserSummary = () => {
               key={task._id}
               className="bg-white shadow-md rounded-2xl p-4 border border-gray-100 hover:shadow-lg transition"
             >
-              <h3 className="text-lg font-bold text-gray-800">{task.task_name}</h3>
+              <h3 className="text-lg font-bold text-gray-800">
+                {task.task_name}
+              </h3>
               <p className="text-sm text-gray-600 mt-2">
                 Task Date:{" "}
                 {task.task_date && task.task_date.length > 0
@@ -160,6 +165,20 @@ const UserSummary = () => {
                     No
                   </label>
                 </div>
+                <div className="container">
+                  <div className="toggle-switch">
+                    <input
+                      type="checkbox"
+                      className="checkbox"
+                      // name={label}
+                      // id={label}
+                    />
+                    <label className="label">
+                      <span className="inner" />
+                      <span className="switch" />
+                    </label>
+                  </div>
+                </div>
               </div>
             </div>
           ))}
@@ -174,7 +193,10 @@ const UserSummary = () => {
           <div className="bg-white p-6 rounded shadow-lg">
             <p className="mb-4">
               Are you sure you want to submit your response as{" "}
-              <span className="font-bold">{selectedValue === "yes" ? "Yes" : "No"}</span>?
+              <span className="font-bold">
+                {selectedValue === "yes" ? "Yes" : "No"}
+              </span>
+              ?
             </p>
             <div className="flex justify-end space-x-4">
               <button

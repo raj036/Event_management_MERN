@@ -25,7 +25,7 @@ const getTasks = async (req, res) => {
     res.writeHead(200, headers);
     const intervalId = setInterval(() => {
       res.write("data: " + JSON.stringify({ employees }) + "\n\n");
-    }, 3000);
+    }, 1000);
 
     req.on("close", () => {
       clearInterval(intervalId);
